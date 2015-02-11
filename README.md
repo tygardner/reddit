@@ -100,21 +100,43 @@ Now we should be able to make new posts, and see them show up on the left hand s
 
 
 
+# Black Diamond
 
 
+##Karma
 
+As you may have noticed, in our service we are adding an empty array and a karma integer to our posts. In order to make it possible for users to leave comments and upvote / downvote things we will need to update our posts.
 
+In firebase's REST api (the one we are using) they have us use an HTTP verb we don't normally use, called PATCH. PATCH is a lot like PUT, it allows us to update something that already exists.
 
+There is some markup in our index.html file that is commented out. This is the markup that holds the karma and comment sections. 
 
+- Un-comment the commented out code in the index.html file
+- Notice how there is a funciton that will run when you click on a thumbs up or thumbs down icon. That function is called vote() and it takes in a couple things:
+  - post.id
+  - direction
 
+The post.id will tell our database which post to apply the vote, and the direction will tell the vote if it should be up or down.
 
+- Create a $scope.vote function that takes the post.id and the direction and passes it into a function called firebaseService.vote()
+- In the firebaseService, create the this.vote function that takes in the post.id and the direction.
+- Since karma is an integer, we can add or minus from it by saying karma++ or karma--
+- Something like this should suit our needs:
 
+```` javascript
+    if(direction === 'up') {
+      karma++;
+    } else if(direction === 'down'){
+      karma--;
+    }
+````
 
+- Make sure than piece of code is inside our this.vote function
+- Now make an ajax request using $http and $q to add the information to our firebase
+  - Remember, our URL needs to include the id ofthe post we are affecting
+  - We need to use PATCH for our method
+- In our controller, we should also run the getData function much like we did in the previous step allowing our view to refresh when we make a change.
 
+##Comments
 
-
-
-
-
-
-
+Adding comments will be very similar to adding karma, take this time to try and make it happen sans instruction.
